@@ -1,9 +1,9 @@
 package com.example.unittestandroid.junit5
 
-import org.junit.After
+import org.junit.*
 import org.junit.Assert.*
-import org.junit.Before
-import org.junit.Test
+import org.junit.experimental.runners.Enclosed
+import org.junit.runner.RunWith
 import java.lang.ArithmeticException
 
 /*Suma
@@ -21,19 +21,38 @@ import java.lang.ArithmeticException
 *
 * */
 internal class CalculatorTest{
-    private var calculator: Calculator? = null
+
+
+    companion object{
+        private var calculator: Calculator? = null
+        @BeforeClass
+        @JvmStatic
+        fun seEjecutaUnaVezAlComienzo(){
+            calculator =Calculator()
+            println("@BeforeClass-> Yo me ejecuto una vez al comienzo")
+        }
+
+        @AfterClass
+        @JvmStatic
+        fun seEjecutaUnaVezAlFinal(){
+            calculator = null
+            println("@BeforeClass-> Yo me ejecuto una vez al final y libero recursos")
+        }
+
+    }
+
 
     //Inicializamos data
-    @Before
+    /*@Before
     fun setUp(){
         calculator = Calculator()
         println("@BeforeEach -> setUp()")
 
-    }
+    }*/
 
     @After
     fun tearDown(){
-        calculator = null
+        //calculator = null
         println("@After -> tearDown()")
     }
 
@@ -84,6 +103,7 @@ internal class CalculatorTest{
         println("divide()")
     }
 
+    @Ignore
     @Test
     fun `necesitamos_que_se_divida_not_valid`(){
         fail("Fallo detectado manualmente, no se puede dividir entre 0 solucionado")
@@ -95,5 +115,34 @@ internal class CalculatorTest{
     fun `divide_by_zero_valid_captura_exepcion`(){
         assertEquals(2, calculator?.divide(5,0))
         println("conExcepcion()")
+    }
+
+    @Ignore("Se va a ignorar hasta que")
+    @Test
+    fun divideByZerooo(){
+        assertEquals("Divide by zero",2,calculator?.divide(5,0))
+    }
+
+    @RunWith(Enclosed::class)
+    inner class add_testing_run_test{
+        @Test
+        fun add_positive_number(){
+            assertEquals(30, calculator?.add(15,15))
+        }
+        @Test
+        fun add_negative_number(){
+            assertEquals(-30, calculator?.add(-15,-15))
+        }
+        @Test
+        fun add_zero_number(){
+            assertEquals(0, calculator?.add(0,0))
+        }
+
+
+    }
+
+    @Test(timeout = 1200)
+    fun timeoutTest(){
+        calculator?.longTaskOperation()
     }
 }

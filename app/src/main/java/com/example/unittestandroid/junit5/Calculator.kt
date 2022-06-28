@@ -1,6 +1,7 @@
 package com.example.unittestandroid.junit5
 
 import java.lang.ArithmeticException
+import java.lang.Exception
 
 class Calculator {
 
@@ -23,5 +24,13 @@ class Calculator {
             throw ArithmeticException("No se puede dividir por 0")
         }
         return n1/n2
+    }
+
+    fun longTaskOperation(){
+        try{
+            Thread.sleep(1000)
+        }catch (e:Exception){
+
+        }
     }
 }
